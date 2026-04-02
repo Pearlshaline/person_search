@@ -4,7 +4,7 @@
 
 A full-stack Person Management application with complete CRUD operations, built with Next.js 15, Prisma ORM, and PostgreSQL.
 
-**Live Demo:** [https://person-delta.vercel.app/](https://person-delta.vercel.app/)  
+**Live Demo:** [https://personapp-gamma.vercel.app/](https://personapp-gamma.vercel.app/)  
 **Repository:** [github.com/Pearlshaline/person-app](https://github.com/Pearlshaline/person-app)
 
 ---
