@@ -11,6 +11,8 @@ const navLinks = [
   { href: '/about', label: 'About' },
   { href: '/database', label: 'Database' },
   { href: '/github', label: 'GitHub' },
+  { href: '/mcp-setup', label: 'MCP Setup' },
+  { href: '/mcp-demo', label: 'MCP Demo' },
 ];
 
 export default function Navbar() {

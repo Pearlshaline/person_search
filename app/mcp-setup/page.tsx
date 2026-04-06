@@ -13,14 +13,14 @@ export default function McpSetupPage() {
       step: '02',
       title: 'Clone the MCP Server Repository',
       desc: 'Clone the Person CRUD MCP server to your local machine.',
-      code: 'git clone https://github.com/Pearlshaline/person-mcp-server.git\ncd person-mcp-server\nnpm install',
+      code: 'git clone https://github.com/Pearlshaline/person_mcp_server.git\ncd person_mcp_server\nnpm install',
       isLink: false,
     },
     {
       step: '03',
       title: 'Configure Environment Variables',
       desc: 'Create a .env file in the MCP server folder with your database connection.',
-      code: 'DATABASE_URL=postgresql://neondb_owner:YOUR_PASSWORD@ep-sweet-rice-an48qees-pooler.c-6.us-east-1.aws.neon.tech/neondb?sslmode=require\nDIRECT_URL=postgresql://neondb_owner:YOUR_PASSWORD@ep-sweet-rice-an48qees.c-6.us-east-1.aws.neon.tech/neondb?sslmode=require',
+      code: 'DATABASE_URL=postgresql://neondb_owner:YOUR_PASSWORD@ep-your-project-pooler.c-6.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require\nDIRECT_URL=postgresql://neondb_owner:YOUR_PASSWORD@ep-your-project.c-6.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
       isLink: false,
     },
     {
@@ -101,7 +101,7 @@ export default function McpSetupPage() {
         <p className="text-sm text-muted-custom leading-relaxed">
           Once configured, you can ask Claude things like <span className="text-accent font-mono text-xs">"List all persons"</span>,{' '}
           <span className="text-accent font-mono text-xs">"Create a person named John Doe"</span>, or{' '}
-          <span className="text-accent font-mono text-xs">"Delete person with ID 3"</span> and Claude will
+          <span className="text-accent font-mono text-xs">"Delete person with ID 7"</span> and Claude will
           execute the database operations automatically.
         </p>
       </div>
@@ -178,19 +178,51 @@ export default function McpSetupPage() {
         <p className="text-sm text-muted-custom mb-4">
           After restarting Claude Desktop, test the MCP connection by typing these prompts:
         </p>
-        <div className="space-y-2">
+        <div className="space-y-4">
           {[
-            'List all persons in the database',
-            'Create a new person named Test User with email test@example.com',
-            'Get person with ID 1',
-            'Update person 1\'s phone to +639123456789',
-            'Delete person with ID 1',
-          ].map((prompt, i) => (
-            <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-muted-surface border border-custom">
-              <span className="w-5 h-5 rounded-full bg-accent/20 text-accent text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
-                {i + 1}
-              </span>
-              <code className="text-xs font-mono text-accent">{prompt}</code>
+            {
+              prompt: 'List all persons in the database',
+              image: '/screenshots/Q1.png',
+              alt: 'List all persons via MCP',
+            },
+            {
+              prompt: 'Create a new person named John Doe with the email john.doe@example.com, age 25, phone number +63 946 882 2314, and address Ilagan City, Isabela',
+              image: '/screenshots/Q2.png',
+              alt: 'Create person via MCP',
+            },
+            {
+              prompt: 'Get person with ID 12',
+              image: '/screenshots/Q3.png',
+              alt: 'Get person by ID via MCP',
+            },
+            {
+              prompt: "Update person 12's age to 21",
+              image: '/screenshots/Q4.png',
+              alt: 'Update person via MCP',
+            },
+            {
+              prompt: 'Search for persons named Ana Reyes',
+              image: '/screenshots/Q5.png',
+              alt: 'Search persons via MCP',
+            },
+            {
+              prompt: 'Delete person with ID 7',
+              image: '/screenshots/Q6.png',
+              alt: 'Delete person via MCP',
+            },
+          ].map((item, i) => (
+            <div key={i} className="rounded-xl bg-muted-surface border border-custom overflow-hidden">
+              <div className="flex items-start gap-3 p-3">
+                <span className="w-5 h-5 rounded-full bg-accent/20 text-accent text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
+                  {i + 1}
+                </span>
+                <code className="text-xs font-mono text-accent">{item.prompt}</code>
+              </div>
+              <img
+                src={item.image}
+                alt={item.alt}
+                className="w-full border-t border-custom"
+              />
             </div>
           ))}
         </div>
