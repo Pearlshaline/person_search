@@ -95,7 +95,7 @@ export default function GithubPage() {
         <h2 className="font-display text-xl font-semibold mb-4">How to Run Locally</h2>
         <div className="space-y-3">
           {[
-            { step: '1', cmd: 'git clone https://github.com/Pearlshaline/person_app.git', desc: 'Clone the repository' },
+            { step: '1', cmd: 'git clone https://github.com/Pearlshaline/person-search.git', desc: 'Clone the repository' },
             { step: '2', cmd: 'cd person_app && npm install', desc: 'Install dependencies' },
             { step: '3', cmd: 'cp .env.example .env  # Add your DATABASE_URL', desc: 'Set up environment variables' },
             { step: '4', cmd: 'npx prisma migrate dev && npx prisma db seed', desc: 'Set up database and seed data' },
