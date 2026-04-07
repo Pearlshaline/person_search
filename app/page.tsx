@@ -16,40 +16,49 @@ interface Person {
 }
 
 export default function Home() {
+  const [user, setUser] = useState<any>(null); // current logged-in user
   const [persons, setPersons] = useState<Person[]>([]);
   const [filtered, setFiltered] = useState<Person[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const [search, setSearch] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [editPerson, setEditPerson] = useState<Person | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
+  // Fetch user session (do not block rendering)
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch('/api/auth/session');
+        const session = await res.json();
+        setUser(session?.user || null);
+      } catch {
+        setUser(null);
+      }
+    };
+    fetchUser();
+  }, []);
+
   const fetchPersons = useCallback(async () => {
-    setLoading(true);
-    setError('');
+    if (!user) return; // don’t fetch if not logged in
     try {
       const res = await fetch('/api/persons');
       const data = await res.json();
-      // Guard: ensure data is always an array before setting state
       const list = Array.isArray(data) ? data : [];
       setPersons(list);
       setFiltered(list);
-      if (!Array.isArray(data)) {
-        setError(data?.error || 'Unexpected response from server.');
-      }
-    } catch (err) {
+    } catch {
       setPersons([]);
       setFiltered([]);
-      setError('Failed to connect to the server. Check your DATABASE_URL.');
-    } finally {
-      setLoading(false);
     }
-  }, []);
+  }, [user]);
 
-  useEffect(() => { fetchPersons(); }, [fetchPersons]);
+  // Fetch persons when user logs in
+  useEffect(() => {
+    fetchPersons();
+  }, [user, fetchPersons]);
 
+  // Filter persons by search
   useEffect(() => {
     const q = search.toLowerCase();
     setFiltered(
@@ -63,7 +72,7 @@ export default function Home() {
     setDeleteLoading(true);
     try {
       await fetch(`/api/persons/${id}`, { method: 'DELETE' });
-      await fetchPersons();
+      fetchPersons();
     } finally {
       setDeleteLoading(false);
       setDeleteId(null);
@@ -99,74 +108,39 @@ export default function Home() {
             className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-card-surface border border-custom text-sm placeholder:text-muted-custom focus:outline-none focus:border-accent transition-colors"
           />
         </div>
-        <button
-          onClick={fetchPersons}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-custom bg-card-surface text-sm hover:bg-muted-surface transition-colors"
-        >
-          <RefreshCw className="w-4 h-4" />
-          Refresh
-        </button>
-        <button
-          onClick={() => { setEditPerson(null); setShowForm(true); }}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent text-white text-sm font-medium hover:opacity-90 transition-all"
-        >
-          <Plus className="w-4 h-4" />
-          Add Person
-        </button>
-      </div>
 
-      {/* Stats bar */}
-      <div className="flex items-center gap-4 mb-6 p-4 rounded-xl bg-card-surface border border-custom">
-        <div className="text-center">
-          <p className="font-display text-2xl font-bold text-accent">{persons.length}</p>
-          <p className="text-xs font-mono text-muted-custom">Total</p>
-        </div>
-        <div className="w-px h-8 bg-[rgb(var(--border))]" />
-        <div className="text-center">
-          <p className="font-display text-2xl font-bold">{filtered.length}</p>
-          <p className="text-xs font-mono text-muted-custom">Showing</p>
-        </div>
-        {search && (
+        {user && (
           <>
-            <div className="w-px h-8 bg-[rgb(var(--border))]" />
-            <p className="text-xs text-muted-custom font-mono">
-              Filtered by: <span className="text-accent">"{search}"</span>
-            </p>
+            <button
+              onClick={fetchPersons}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-custom bg-card-surface text-sm hover:bg-muted-surface transition-colors"
+            >
+              <RefreshCw className="w-4 h-4" />
+              Refresh
+            </button>
+
+            <button
+              onClick={() => { setEditPerson(null); setShowForm(true); }}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent text-white text-sm font-medium hover:opacity-90 transition-all"
+            >
+              <Plus className="w-4 h-4" />
+              Add Person
+            </button>
           </>
         )}
       </div>
 
-      {/* Error banner */}
-      {error && (
-        <div className="mb-6 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/30 text-sm text-red-400 flex items-center gap-2">
-          ⚠️ {error}
-        </div>
+      {/* Guest view */}
+      {!user && (
+        <p className="text-center text-muted-custom py-24">
+          You must be logged in to view persons.
+        </p>
       )}
 
-      {/* Loading */}
-      {loading ? (
-        <div className="flex items-center justify-center py-24">
-          <div className="flex flex-col items-center gap-3">
-            <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin" />
-            <p className="text-sm text-muted-custom font-mono">Loading persons...</p>
-          </div>
-        </div>
-
-      /* Empty state */
-      ) : filtered.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-24 gap-4">
-          <div className="w-16 h-16 rounded-2xl bg-muted-surface flex items-center justify-center">
-            <User className="w-8 h-8 text-muted-custom" />
-          </div>
-          <p className="font-display text-lg font-semibold">No persons found</p>
-          <p className="text-sm text-muted-custom">
-            {search ? 'Try a different search term.' : 'Click "Add Person" to create your first record.'}
-          </p>
-        </div>
-
-      ) : (
+      {/* Table / Cards */}
+      {user && filtered.length > 0 && (
         <>
-          {/* Desktop table */}
+          {/* Desktop Table */}
           <div className="hidden md:block rounded-2xl bg-card-surface border border-custom overflow-hidden">
             <table className="w-full">
               <thead>
@@ -219,7 +193,7 @@ export default function Home() {
             </table>
           </div>
 
-          {/* Mobile cards */}
+          {/* Mobile Cards */}
           <div className="md:hidden space-y-3">
             {filtered.map((person) => (
               <div key={person.id} className="p-4 rounded-2xl bg-card-surface border border-custom card-hover">
@@ -261,7 +235,7 @@ export default function Home() {
       )}
 
       {/* Person Form Modal */}
-      {showForm && (
+      {user && showForm && (
         <PersonForm
           person={editPerson
             ? { ...editPerson, phone: editPerson.phone || '', age: editPerson.age?.toString() || '', address: editPerson.address || '' }
@@ -272,7 +246,7 @@ export default function Home() {
       )}
 
       {/* Delete Confirm Modal */}
-      {deleteId && (
+      {user && deleteId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div className="w-full max-w-sm bg-card-surface border border-custom rounded-2xl p-6 text-center">
             <div className="w-12 h-12 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center mx-auto mb-4">
@@ -302,4 +276,4 @@ export default function Home() {
       )}
     </div>
   );
-}
+};
