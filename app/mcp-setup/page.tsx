@@ -185,7 +185,7 @@ export default function McpSetupPage() {
               alt: 'List all persons via MCP',
             },
             {
-              prompt: 'Create a new person named John Doe with the email john.doe@example.com, age 25, phone number +63 946 882 2314, and address Ilagan City, Isabela',
+              prompt: 'Create a new person named John Doe with the email john.doe@email.com, age 25, phone number +63 946 882 2314, and address Ilagan City, Isabela',
               image: '/screenshots/Q2.png',
               alt: 'Create person via MCP',
             },
