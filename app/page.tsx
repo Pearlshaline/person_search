@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Plus, Search, Pencil, Trash2, User, Mail, Phone, MapPin, Calendar, RefreshCw } from 'lucide-react';
+import { Plus, Search, Pencil, Trash2, Mail, Phone, MapPin, Calendar, RefreshCw } from 'lucide-react';
 import PersonForm from '@/components/PersonForm';
 
 interface Person {
@@ -16,7 +16,7 @@ interface Person {
 }
 
 export default function Home() {
-  const [user, setUser] = useState<any>(null); // current logged-in user
+  const [user, setUser] = useState<any>(null);
   const [persons, setPersons] = useState<Person[]>([]);
   const [filtered, setFiltered] = useState<Person[]>([]);
   const [search, setSearch] = useState('');
@@ -24,8 +24,8 @@ export default function Home() {
   const [editPerson, setEditPerson] = useState<Person | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [showLoginAlert, setShowLoginAlert] = useState(false); // ✅ NEW
 
-  // Fetch user session (do not block rendering)
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -40,7 +40,7 @@ export default function Home() {
   }, []);
 
   const fetchPersons = useCallback(async () => {
-    if (!user) return; // don’t fetch if not logged in
+    if (!user) return;
     try {
       const res = await fetch('/api/persons');
       const data = await res.json();
@@ -53,12 +53,10 @@ export default function Home() {
     }
   }, [user]);
 
-  // Fetch persons when user logs in
   useEffect(() => {
     fetchPersons();
   }, [user, fetchPersons]);
 
-  // Filter persons by search
   useEffect(() => {
     const q = search.toLowerCase();
     setFiltered(
@@ -104,6 +102,9 @@ export default function Home() {
             placeholder="Search by name, email, or address..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            onFocus={() => { // ✅ NEW: show alert if not logged in
+              if (!user) setShowLoginAlert(true);
+            }}
             className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-card-surface border border-custom text-sm placeholder:text-muted-custom focus:outline-none focus:border-accent transition-colors"
           />
         </div>
@@ -129,11 +130,21 @@ export default function Home() {
         )}
       </div>
 
-      {/* Guest view */}
-      {!user && (
-        <p className="text-center text-muted-custom py-24">
-          You must be logged in to view persons.
-        </p>
+      {/* ✅ Login Alert Modal */}
+      {showLoginAlert && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="w-full max-w-sm bg-card-surface border border-custom rounded-2xl p-6 text-center">
+            <p className="text-sm text-muted-custom mb-4">
+              You must be logged in to view persons.
+            </p>
+            <button
+              onClick={() => setShowLoginAlert(false)}
+              className="px-5 py-2.5 rounded-xl bg-accent text-white text-sm font-medium hover:opacity-90 transition-all"
+            >
+              OK
+            </button>
+          </div>
+        </div>
       )}
 
       {/* Table / Cards */}
@@ -275,4 +286,4 @@ export default function Home() {
       )}
     </div>
   );
-};
+}
