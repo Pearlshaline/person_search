@@ -50,7 +50,7 @@ A full-stack Person Management application with complete CRUD operations, built 
 ```bash
 # 1. Clone
 git clone https://github.com/Pearlshaline/person_search.git
-cd person-app
+cd person-search
 
 # 2. Install
 npm install
