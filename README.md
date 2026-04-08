@@ -6,7 +6,6 @@ A full-stack Person Management application with complete CRUD operations, built 
 
 **Live Demo:** [https://personsearch-omega.vercel.app/](https://personsearch-omega.vercel.app/)  
 
-**Repository:** [github.com/Pearlshaline/person_search](https://github.com/Pearlshaline/person_search.git) 
 
 ---
 
