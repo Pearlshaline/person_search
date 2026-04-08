@@ -179,49 +179,20 @@ export default function McpSetupPage() {
         </p>
         <div className="space-y-4">
           {[
-            {
-              prompt: 'List all persons in the database',
-              image: '/screenshots/Q1.png',
-              alt: 'List all persons via MCP',
-            },
-            {
-              prompt: 'Create a new person named John Doe with the email john.doe@email.com, age 25, phone number +63 946 882 2314, and address Ilagan City, Isabela',
-              image: '/screenshots/Q2.png',
-              alt: 'Create person via MCP',
-            },
-            {
-              prompt: 'Get person with ID 2',
-              image: '/screenshots/Q3.png',
-              alt: 'Get person by ID via MCP',
-            },
-            {
-              prompt: "Update person 2's age to 36",
-              image: '/screenshots/Q4.png',
-              alt: 'Update person via MCP',
-            },
-            {
-              prompt: 'Search for persons named Ana Reyes',
-              image: '/screenshots/Q5.png',
-              alt: 'Search persons via MCP',
-            },
-            {
-              prompt: 'Delete person with ID 1',
-              image: '/screenshots/Q6.png',
-              alt: 'Delete person via MCP',
-            },
-          ].map((item, i) => (
+            'List all persons in the database',
+            'Create a new person named John Doe with the email john.doe@email.com, age 25, phone number +63 946 882 2314, and address Ilagan City, Isabela',
+            'Get person with ID 2',
+            "Update person 2's age to 36",
+            'Search for persons named Ana Reyes',
+            'Delete person with ID 1',
+          ].map((prompt, i) => (
             <div key={i} className="rounded-xl border overflow-hidden">
               <div className="flex items-start gap-3 p-3">
                 <span className="w-5 h-5 rounded-full text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
                   {i + 1}
                 </span>
-                <code className="text-xs font-mono">{item.prompt}</code>
+                <code className="text-xs font-mono">{prompt}</code>
               </div>
-              <img
-                src={item.image}
-                alt={item.alt}
-                className="w-full border-t"
-              />
             </div>
           ))}
         </div>
