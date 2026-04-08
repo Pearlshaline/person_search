@@ -3,9 +3,9 @@ import { Github, ExternalLink, GitBranch, Star, Code2, BookOpen } from 'lucide-r
 export default function GithubPage() {
   const primaryRepos = [
     {
-      name: 'person-search',
+      name: 'person_search',
       desc: 'Full-stack Person CRUD application built with Next.js 15, Prisma ORM, and PostgreSQL. Features complete Create, Read, Update, and Delete operations with a responsive, modern UI.',
-      url: 'https://github.com/Pearlshaline/person-search',
+      url: 'https://github.com/Pearlshaline/person_search',
       tags: ['Next.js 15', 'TypeScript', 'Prisma', 'PostgreSQL', 'Tailwind CSS', 'Vercel'],
     },
     {
@@ -92,7 +92,7 @@ export default function GithubPage() {
         <h2 className="font-display text-xl font-semibold mb-4">How to Run Locally</h2>
         <div className="space-y-3">
           {[
-            { step: '1', cmd: 'git clone https://github.com/Pearlshaline/person-search.git', desc: 'Clone the full-stack app repository' },
+            { step: '1', cmd: 'git clone https://github.com/Pearlshaline/person_search.git', desc: 'Clone the full-stack app repository' },
             { step: '2', cmd: 'git clone https://github.com/Pearlshaline/person_mcp_server.git', desc: 'Clone the MCP server repository' },
             { step: '3', cmd: 'cd person-search && npm install', desc: 'Install app dependencies' },
             { step: '4', cmd: 'cp .env.example .env  # Add your DATABASE_URL', desc: 'Set up environment variables' },
