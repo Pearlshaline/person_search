@@ -4,9 +4,9 @@
 
 A full-stack Person Management application with complete CRUD operations, built with Next.js 15, Prisma ORM, and PostgreSQL.
 
-**Live Demo:** [https://personapp-gamma.vercel.app/](https://personapp-gamma.vercel.app/)  
+**Live Demo:** [https://personsearch-omega.vercel.app/](https://personsearch-omega.vercel.app/)  
 
-**Repository:** [github.com/Pearlshaline/person_app](https://github.com/Pearlshaline/person_app.git) 
+**Repository:** [github.com/Pearlshaline/person_app](https://github.com/Pearlshaline/person_search.git) 
 
 ---
 
@@ -49,7 +49,7 @@ A full-stack Person Management application with complete CRUD operations, built 
 
 ```bash
 # 1. Clone
-git clone https://github.com/Pearlshaline/person_app.git
+git clone https://github.com/Pearlshaline/person_search.git
 cd person-app
 
 # 2. Install
